@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from tabulate import tabulate
+from datetime import datetime
 
 # Data: https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv
 # Load data
@@ -33,3 +35,13 @@ plt.plot(times, func(times, *popt), 'r-', label='fit: a=%5.3f, b=%5.3f, c=%5.3f'
 plt.ylabel('Number of cases in NY')
 plt.xlabel('9/03-15/03 week')
 plt.show()
+
+times_pred = np.linspace(7,14,8)
+plt.figure()
+plt.plot(times_pred, func(times_pred, *popt), 'r-', label='fit: a=%5.3f, b=%5.3f, c=%5.3f' % tuple(popt))
+plt.ylabel('Number of cases in NY')
+plt.xlabel('15/03-22/03 week')
+plt.show()
+
+datelist = pd.date_range(start='15/3/2020', periods=8).tolist()
+print(tabulate([[datelist[i], int(func(times_pred[i], *popt))] for i in range(7)], headers=['Date', 'prediction']))
